@@ -18,6 +18,7 @@ class Upload extends React.Component {
       .then(laps => {
         this.setState({ loading: false });
         this.props.menuStore.addLaps();
+        this.props.menuStore.addGraph();
         this.props.lapsStore.setLaps(laps);
       })
       .catch(error => {

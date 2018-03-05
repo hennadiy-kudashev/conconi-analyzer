@@ -18,17 +18,25 @@ const Laps = inject('lapsStore')(
               <th>AHR (bpm)</th>
               <th>Speed (km/h)</th>
               <th>Pace (min/km)</th>
+              <th>Selected</th>
             </tr>
           </thead>
           <tbody>
             {lapsStore.getLaps().map((lapStore, index) => (
-              <tr key={lapStore.lap.name}>
+              <tr key={lapStore.lap.name} onClick={() => lapStore.toggle()}>
                 <th scope="row">{index + 1}</th>
                 <td>{lapStore.lap.get('distance')}</td>
                 <td>{lapStore.lap.get('time')}</td>
                 <td>{lapStore.lap.get('avg_hr')}</td>
                 <td>{lapStore.lap.get('avg_speed')}</td>
                 <td>{lapStore.lap.get('avg_pace')}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={lapStore.lap.get('selected')}
+                    onChange={() => lapStore.toggle()}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>

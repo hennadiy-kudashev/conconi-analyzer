@@ -2,7 +2,8 @@ import { action, observable } from 'mobx';
 
 class MenuStore {
   static Items = {
-    Laps: 'Laps'
+    Laps: 'Laps',
+    Graph: 'Graph'
   };
 
   @observable items;
@@ -27,8 +28,19 @@ class MenuStore {
     }
   }
 
+  @action
+  addGraph() {
+    if (!this.hasGraph()) {
+      this.addItem(MenuStore.Items.Graph);
+    }
+  }
+
   hasLaps() {
     return this.items.includes(MenuStore.Items.Laps);
+  }
+
+  hasGraph() {
+    return this.items.includes(MenuStore.Items.Graph);
   }
 }
 

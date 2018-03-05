@@ -3,6 +3,7 @@ import About from './About';
 import Layout from './Layout';
 import Upload from './Upload';
 import Laps from './Laps';
+import Graph from './Graph';
 import { inject, observer } from 'mobx-react';
 
 @inject('menuStore')
@@ -14,6 +15,7 @@ class App extends Component {
         <About />
         <Upload />
         {this.props.menuStore.hasLaps() ? <Laps /> : null}
+        {this.props.menuStore.hasGraph() ? <Graph /> : null}
       </Layout>
     );
   }

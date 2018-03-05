@@ -3,7 +3,7 @@ import { action, autorun, observable } from 'mobx';
 class Lap {
   @observable lap = observable.map();
 
-  constructor(lapData = {}, selected = false) {
+  constructor(lapData = {}, selected = true) {
     this.lap.merge(lapData);
     this.lap.set('selected', selected);
   }
@@ -23,6 +23,10 @@ class LapsStore {
 
   getLaps() {
     return this.laps;
+  }
+
+  getSelectedLaps() {
+    return this.laps.filter(lapStore => lapStore.lap.get('selected'));
   }
 
   @action
