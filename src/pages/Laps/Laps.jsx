@@ -22,9 +22,9 @@ const Laps = inject('lapsStore')(
             </tr>
           </thead>
           <tbody>
-            {lapsStore.getLaps().map((lapStore, index) => (
+            {lapsStore.getLaps().map(lapStore => (
               <tr key={lapStore.lap.name} onClick={() => lapStore.toggle()}>
-                <th scope="row">{index + 1}</th>
+                <th scope="row">{lapStore.lap.get('index')}</th>
                 <td>{lapStore.lap.get('distance')}</td>
                 <td>{lapStore.lap.get('time')}</td>
                 <td>{lapStore.lap.get('avg_hr')}</td>
@@ -34,7 +34,7 @@ const Laps = inject('lapsStore')(
                   <input
                     type="checkbox"
                     checked={lapStore.lap.get('selected')}
-                    onChange={() => lapStore.toggle()}
+                    readOnly
                   />
                 </td>
               </tr>

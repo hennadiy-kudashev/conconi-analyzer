@@ -17,7 +17,9 @@
     "react-app-rewire-mobx": "^1.0.7",
     "react-app-rewired": "^1.4.1",
     "react-dom": "^16.2.0",
+    "react-easy-chart": "^1.0.0",
     "react-scripts": "1.1.1",
+    "react-scroll": "^1.7.7",
     "reactstrap": "^5.0.0-beta"
   },
   "lint-staged": {

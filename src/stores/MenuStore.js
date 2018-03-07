@@ -1,15 +1,11 @@
 import { action, observable } from 'mobx';
+import menus from 'pages/Layout/menus';
 
 class MenuStore {
-  static Items = {
-    Laps: 'Laps',
-    Graph: 'Graph'
-  };
-
   @observable items;
 
   constructor() {
-    this.items = [];
+    this.items = [menus.About, menus.Upload];
   }
 
   getItems() {
@@ -18,29 +14,17 @@ class MenuStore {
 
   @action
   addItem(item) {
-    this.items.push(item);
+    if (!this.items.some(t => t.id === item.id)) {
+      this.items.push(item);
+    }
   }
 
-  @action
   addLaps() {
-    if (!this.hasLaps()) {
-      this.addItem(MenuStore.Items.Laps);
-    }
+    return this.addItem(menus.Laps);
   }
 
-  @action
   addGraph() {
-    if (!this.hasGraph()) {
-      this.addItem(MenuStore.Items.Graph);
-    }
-  }
-
-  hasLaps() {
-    return this.items.includes(MenuStore.Items.Laps);
-  }
-
-  hasGraph() {
-    return this.items.includes(MenuStore.Items.Graph);
+    return this.addItem(menus.Graph);
   }
 }
 

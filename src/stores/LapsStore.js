@@ -1,4 +1,4 @@
-import { action, autorun, observable } from 'mobx';
+import { action, observable } from 'mobx';
 
 class Lap {
   @observable lap = observable.map();
@@ -31,14 +31,17 @@ class LapsStore {
 
   @action
   setLaps(laps) {
-    this.laps = laps.map(lap => new Lap(lap));
+    this.laps = laps.map(
+      (lap, index) =>
+        new Lap(
+          {
+            ...lap,
+            index: index + 1
+          },
+          lap.distance > 150 && lap.distance < 250
+        )
+    );
   }
 }
 
-const lapsStore = new LapsStore();
-
-autorun(() => {
-  console.log(lapsStore.getLaps().toJS());
-});
-
-export default lapsStore;
+export default new LapsStore();
