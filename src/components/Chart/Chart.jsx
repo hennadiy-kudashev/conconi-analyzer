@@ -63,7 +63,7 @@ class Chart extends React.Component {
   }
 
   render() {
-    const { data, onDataPointClick } = this.props;
+    const { data, onDataPointClick, axisLabels, xDomainRange } = this.props;
     return (
       <div>
         {this.renderTooltip()}
@@ -71,7 +71,7 @@ class Chart extends React.Component {
           axes
           dataPoints
           clickHandler={onDataPointClick}
-          axisLabels={{ x: 'Speed, km/h', y: 'HR, bpm' }}
+          axisLabels={axisLabels}
           //lineColors={['#007bff']}
           mouseOverHandler={this.mouseOverHandler}
           mouseOutHandler={this.mouseOutHandler}
@@ -80,6 +80,7 @@ class Chart extends React.Component {
           height={this.state.componentWidth / 2}
           interpolate={'cardinal'}
           data={[data]}
+          xDomainRange={xDomainRange}
         />
       </div>
     );
