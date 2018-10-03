@@ -1,7 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LineChart from 'react-easy-chart/lib/line-chart';
+import Legend from 'react-easy-chart/lib/legend';
 import { Popover, PopoverBody, PopoverHeader } from 'reactstrap';
+
+const lineColors = [
+  '#1f77b4',
+  '#ff7f0e',
+  '#2ca02c',
+  '#d62728',
+  '#9467bd',
+  '#8c564b',
+  '#e377c2',
+  '#7f7f7f',
+  '#bcbd22',
+  '#17becf'
+];
 
 class Chart extends React.Component {
   state = {
@@ -63,24 +77,43 @@ class Chart extends React.Component {
   }
 
   render() {
-    const { data, onDataPointClick, axisLabels, xDomainRange } = this.props;
+    const {
+      data,
+      onDataPointClick,
+      axisLabels,
+      xDomainRange,
+      legend
+    } = this.props;
     return (
       <div>
         {this.renderTooltip()}
         <LineChart
+          style={{
+            '.label': { fill: 'black' },
+            '.domain': { stroke: 'white' },
+            '.data-point': { stroke: 'rgb(63, 76, 85) !important' }
+          }}
           axes
           dataPoints
           clickHandler={onDataPointClick}
           axisLabels={axisLabels}
-          //lineColors={['#007bff']}
+          lineColors={lineColors}
           mouseOverHandler={this.mouseOverHandler}
           mouseOutHandler={this.mouseOutHandler}
           mouseMoveHandler={this.mouseMoveHandler}
           width={this.state.componentWidth}
           height={this.state.componentWidth / 2}
           interpolate={'cardinal'}
-          data={[data]}
+          data={data}
+          grid
+          verticalGrid
           xDomainRange={xDomainRange}
+        />
+        <Legend
+          data={legend}
+          dataId="name"
+          horizontal
+          config={lineColors.map(color => ({ color }))}
         />
       </div>
     );

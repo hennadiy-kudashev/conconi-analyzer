@@ -4,22 +4,28 @@ import Container from 'components/Container';
 import FitParser from 'lib/FitParser';
 import { inject } from 'mobx-react';
 
-@inject('lapsStore', 'menuStore')
+@inject('menuStore', 'filesStore')
 class Upload extends React.Component {
   state = {
     loading: false,
     error: ''
   };
 
-  handleChange = file => {
+  handleChange = files => {
     this.setState({ loading: true });
-    new FitParser()
-      .parse(file)
-      .then(laps => {
+    const parsers = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files.item(i);
+      parsers.push(new FitParser().parse(file).then(laps => ({ laps, file })));
+    }
+    Promise.all(parsers)
+      .then(data => {
         this.setState({ loading: false });
         this.props.menuStore.addLaps();
         this.props.menuStore.addGraph();
-        this.props.lapsStore.setLaps(laps);
+        data.forEach(({ file, laps }) => {
+          this.props.filesStore.addFile(file.name, laps);
+        });
       })
       .catch(error => {
         this.setState({ loading: false, error: error });

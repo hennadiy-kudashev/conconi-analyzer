@@ -17,20 +17,7 @@ class Lap {
 class LapsStore {
   @observable laps;
 
-  constructor() {
-    this.laps = [];
-  }
-
-  getLaps() {
-    return this.laps;
-  }
-
-  getSelectedLaps() {
-    return this.laps.filter(lapStore => lapStore.lap.get('selected'));
-  }
-
-  @action
-  setLaps(laps) {
+  constructor(laps) {
     this.laps = laps.map(
       (lap, index) =>
         new Lap(
@@ -42,6 +29,14 @@ class LapsStore {
         )
     );
   }
+
+  getLaps() {
+    return this.laps;
+  }
+
+  getSelectedLaps() {
+    return this.laps.filter(lapStore => lapStore.lap.get('selected'));
+  }
 }
 
-export default new LapsStore();
+export default LapsStore;

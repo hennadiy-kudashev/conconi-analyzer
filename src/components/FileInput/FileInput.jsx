@@ -4,15 +4,17 @@ class FileInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      label: `Choose ${props.accept} file`
+      label: `Choose ${props.accept} file(s)`
     };
   }
 
   handleChange = e => {
     if (e.target.files.length > 0) {
-      const file = e.target.files[0];
-      this.setState({ label: file.name });
-      this.props.onChange(file);
+      const files = e.target.files;
+      //this.setState({ label: file.name });
+      this.props.onChange(files);
+      //in order to upload the same file again
+      e.target.value = '';
     } else {
       this.setState({ label: 'No files selected' });
     }
@@ -27,6 +29,7 @@ class FileInput extends React.Component {
           className="custom-file-input"
           id="inputGroupFile03"
           accept={accept}
+          multiple
           onChange={this.handleChange}
         />
         <label className="custom-file-label" htmlFor="inputGroupFile03">

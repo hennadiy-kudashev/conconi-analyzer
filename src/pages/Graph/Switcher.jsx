@@ -26,7 +26,7 @@ class Switcher extends React.Component {
               checked={value === 'speed'}
               onChange={this.handleChangeFor('speed')}
             />{' '}
-            Speed
+            Speed (km/h)
           </Label>
         </FormGroup>
         <FormGroup check>
@@ -37,7 +37,7 @@ class Switcher extends React.Component {
               checked={value === 'time'}
               onChange={this.handleChangeFor('time')}
             />{' '}
-            Time
+            Time (sec)
           </Label>
         </FormGroup>
       </FormGroup>

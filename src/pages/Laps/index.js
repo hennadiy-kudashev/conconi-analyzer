@@ -1,3 +1,3 @@
-import Laps from './Laps';
+import Files from './Files';
 
-export default Laps;
+export default Files;

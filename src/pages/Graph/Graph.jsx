@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Chart from 'components/Chart';
 import Switcher from './Switcher';
 
-@inject('lapsStore')
+@inject('filesStore')
 @observer
 class Graph extends React.Component {
   state = {
@@ -29,13 +29,17 @@ class Graph extends React.Component {
   };
 
   getLapStoreBy = dataPoint => {
-    return this.props.lapsStore
-      .getLaps()
-      .find(
-        lapStore =>
-          lapStore.lap.get(this.getXAxisProp()) === dataPoint.x &&
-          lapStore.lap.get('avg_hr') === dataPoint.y
-      );
+    for (const fileStore of this.props.filesStore.getFiles()) {
+      const store = fileStore
+        .getLaps()
+        .getLaps()
+        .find(
+          lapStore =>
+            lapStore.lap.get(this.getXAxisProp()) === dataPoint.x &&
+            lapStore.lap.get('avg_hr') === dataPoint.y
+        );
+      if (store) return store;
+    }
   };
 
   handleDataPointClick = dataPoint => {
@@ -47,13 +51,16 @@ class Graph extends React.Component {
     return {
       header: `Lap ${lapStore.lap.get('index')}`,
       body: () => (
-        <ul>
-          <li>HeardRate: {lapStore.lap.get('avg_hr')} bpm</li>
-          <li>Speed: {lapStore.lap.get('avg_speed')} km/h</li>
-          <li>Distance: {lapStore.lap.get('distance')} m</li>
-          <li>Time: {lapStore.lap.get('time')} sec</li>
-          <li>Pace: {lapStore.lap.get('avg_pace')} min/km</li>
-        </ul>
+        <div>
+          <ul>
+            <li>HeardRate: {lapStore.lap.get('avg_hr')} bpm</li>
+            <li>Speed: {lapStore.lap.get('avg_speed')} km/h</li>
+            <li>Distance: {lapStore.lap.get('distance')} m</li>
+            <li>Time: {lapStore.lap.get('time')} sec</li>
+            <li>Pace: {lapStore.lap.get('avg_pace')} min/km</li>
+          </ul>
+          <i>Click to remove this point.</i>
+        </div>
       )
     };
   };
@@ -63,25 +70,49 @@ class Graph extends React.Component {
     }
   };
 
+  getXAxisLabel = () => {
+    const { xAxis } = this.state;
+    if (xAxis === 'speed') {
+      return 'Speed, km/h';
+    }
+    if (xAxis === 'time') {
+      return 'Time, sec';
+    }
+    throw new Error(`Stitch ${xAxis} is not supported`);
+  };
+
   render() {
-    const { lapsStore } = this.props;
-    const data = lapsStore.getSelectedLaps().map(lapStore => ({
-      x: lapStore.lap.get(this.getXAxisProp()),
-      y: lapStore.lap.get('avg_hr')
-    }));
+    const { filesStore } = this.props;
+    const data = filesStore.getFiles().map(fileStore =>
+      fileStore
+        .getLaps()
+        .getSelectedLaps()
+        .map(lapStore => ({
+          x: lapStore.lap.get(this.getXAxisProp()),
+          y: lapStore.lap.get('avg_hr')
+        }))
+    );
+    const legend = filesStore
+      .getFiles()
+      .map(fileStore => ({ name: fileStore.getName() }));
 
     return (
       <Container>
         <h1 className="mt-5">Graph</h1>
         <p className="lead">Rendered based on selected laps.</p>
+        <Switcher onChange={this.handleSwitcherChange} />
         <Chart
           data={data}
-          axisLabels={{ x: 'Speed, km/h', y: 'HR, bpm' }}
+          axisLabels={{ x: this.getXAxisLabel(), y: 'HR, bpm' }}
           onDataPointClick={this.handleDataPointClick}
           getTooltipByDataPoint={this.getTooltipByDataPoint}
-          xDomainRange={this.getXDomainRange(data)}
+          legend={legend}
+          /*xDomainRange={this.getXDomainRange(data)}*/
         />
-        <Switcher onChange={this.handleSwitcherChange} />
+        <br />
+        <br />
+        <br />
+        <br />
       </Container>
     );
   }

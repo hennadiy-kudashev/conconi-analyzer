@@ -1,7 +1,7 @@
-import lapsStore from './LapsStore';
 import menuStore from './MenuStore';
+import filesStore from './FilesStore';
 
 export default {
-  lapsStore,
-  menuStore
+  menuStore,
+  filesStore
 };
